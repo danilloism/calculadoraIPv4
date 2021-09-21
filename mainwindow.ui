@@ -96,19 +96,6 @@
       </rect>
      </property>
     </widget>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="geometry">
-      <rect>
-       <x>9</x>
-       <y>20</y>
-       <width>301</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string/>
-     </property>
-    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">

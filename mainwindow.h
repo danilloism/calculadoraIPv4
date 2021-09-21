@@ -15,6 +15,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_radioButtonCIDR_Sim_clicked();
+
+    void on_radioButtonCIDR_Nao_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

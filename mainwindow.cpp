@@ -15,3 +15,17 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::on_radioButtonCIDR_Sim_clicked()
+{
+    ui->lineEditMascara->setEnabled(false);
+    ui->lineEditCIDR->setEnabled(true);
+}
+
+
+void MainWindow::on_radioButtonCIDR_Nao_clicked()
+{
+    ui->lineEditMascara->setEnabled(true);
+    ui->lineEditCIDR->setEnabled(false);
+}
+
