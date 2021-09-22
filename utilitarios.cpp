@@ -2,10 +2,7 @@
 
 namespace dnn {
 
-    Utilitarios::Utilitarios()
-    {
 
-    }
 
 
 }

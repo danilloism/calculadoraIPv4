@@ -1,8 +1,8 @@
 #ifndef ENDERECO_H
 #define ENDERECO_H
 
-#include "QString"
 #include "QList"
+#include "utilitarios.h"
 
 namespace dnn {
 

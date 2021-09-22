@@ -1,12 +1,15 @@
 #ifndef UTILITARIOS_H
 #define UTILITARIOS_H
 
+#include "QString"
+
 namespace dnn {
 
     class Utilitarios
     {
     public:
-        Utilitarios();
+        static QString IntParaBin(int &inteiro);
+        static int BinParaInt(QString &binario);
     };
 
 }

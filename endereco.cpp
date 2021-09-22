@@ -8,6 +8,7 @@ namespace dnn {
             octectos()
         {
             this->validaEndereco(endereco);
+            this->validaClasse();
         }
 
 
@@ -45,9 +46,12 @@ namespace dnn {
 
     void Endereco::validaClasse()
     {
-        if(ehCIDR()){
 
-        }
+        if(octectos.at(0) >= 0 && octectos.at(0) <=127) classe = 'A';
+        if(octectos.at(0) >= 128 && octectos.at(0) <=191) classe = 'B';
+        if(octectos.at(0) >= 192 && octectos.at(0) <=223) classe = 'C';
+        else throw QString("erro");
+
     }
 }
 
