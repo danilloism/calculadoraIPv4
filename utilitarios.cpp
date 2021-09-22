@@ -1,6 +1,11 @@
 #include "utilitarios.h"
 
-Utilitarios::Utilitarios()
-{
+namespace dnn {
+
+    Utilitarios::Utilitarios()
+    {
+
+    }
+
 
 }

@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setFixedSize(this->width(), this->height());
     ui->lineEditMascara->setEnabled(false);
+    QString teste = "0.0.0.0";
+    ui->lineEditEndereco->setText(QString::number(teste.split(QLatin1Char('.')).count()));
 }
 
 MainWindow::~MainWindow()
