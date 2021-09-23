@@ -12,15 +12,18 @@ SOURCES += \
     endereco.cpp \
     main.cpp \
     mainwindow.cpp \
+    telaresultados.cpp \
     utilitarios.cpp
 
 HEADERS += \
     endereco.h \
     mainwindow.h \
+    telaresultados.h \
     utilitarios.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    telaresultados.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
