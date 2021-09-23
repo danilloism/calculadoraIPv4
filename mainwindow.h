@@ -2,8 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "QString"
 #include "telaresultados.h"
+#include "endereco.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -21,6 +21,8 @@ private slots:
     void on_radioButtonCIDR_Sim_clicked();
 
     void on_radioButtonCIDR_Nao_clicked();
+
+    void on_pushButtonCalcular_clicked();
 
 private:
     Ui::MainWindow *ui;

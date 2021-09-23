@@ -171,14 +171,14 @@
      </rect>
     </property>
     <property name="title">
-     <string>Sub-Redes</string>
+     <string>Sub-Redes (limite máx. 500)</string>
     </property>
     <widget class="QSpinBox" name="spinBox">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>30</y>
-       <width>128</width>
+       <width>41</width>
        <height>28</height>
       </rect>
      </property>
@@ -186,7 +186,7 @@
       <number>1</number>
      </property>
      <property name="maximum">
-      <number>999999</number>
+      <number>500</number>
      </property>
     </widget>
    </widget>

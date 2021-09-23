@@ -8,6 +8,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setFixedSize(this->width(), this->height());
     ui->lineEditMascara->setEnabled(false);
+    //QList<int> teste;
+    //for(int i=0;i<3;i++) teste.append(i);
+    //int i = 0;
+    //i = pow(2,7) + pow(2,6);
+    //ui->lineEditEndereco->setText(QString::number(i));
 }
 
 MainWindow::~MainWindow()
@@ -27,5 +32,13 @@ void MainWindow::on_radioButtonCIDR_Nao_clicked()
 {
     ui->lineEditMascara->setEnabled(true);
     ui->lineEditCIDR->setEnabled(false);
+}
+
+
+void MainWindow::on_pushButtonCalcular_clicked()
+{
+    telaResultados telaResultados;
+    telaResultados.setModal(true);
+    telaResultados.exec();
 }
 
