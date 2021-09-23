@@ -11,9 +11,10 @@ namespace dnn {
     private:
         QString mascara;
         QChar classe;
-        QList<int> octectos;
-        bool ehCIDR();
-        void validaEndereco(QString &endereco);
+        QList<int> octetos;
+        bool ehCIDR(QString &mascara)const;
+        bool ehBin()const;
+        bool validaEndereco(QString &endereco, QList<int> &listaOctetos);
         void validaMascara(QString &mascara);
         void validaClasse();
 
