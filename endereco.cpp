@@ -22,11 +22,23 @@ namespace dnn {
 
         QString endereco;
         for(int i=0; i<4; i++){
-            endereco.append(octetos.at(i));
+            endereco.append(QString::number(octetos.at(i)));
             endereco.append(".");
         }
         endereco.chop(1);
         return endereco;
+    }
+
+    QString Endereco::getEnderecoBin(QList<int> &listaOctetos) const
+    {
+        if(listaOctetos.isEmpty()) return "Endereço não validado.";
+        QString bin;
+        for(int i=0; i<4; i++){
+            bin.append(Utilitarios::toBinary(listaOctetos.at(i)));
+            bin.append(".");
+        }
+        bin.chop(1);
+        return bin;
     }
 
 

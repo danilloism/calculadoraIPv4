@@ -8,10 +8,10 @@ namespace dnn {
     class Utilitarios
     {
     public:
-        static QString IntParaBin(int &inteiro);
-        static int BinParaInt(QString &binario);
-        static QString binAND(QString &binario1, QString binario2);
-        static QString binOR(QString &binario1, QString binario2);
+        static QString toBinary(int inteiro);
+        static int BinParaInt(QString binario);
+        static QString binAND(QString binario1, QString binario2);
+        static QString binOR(QString binario1, QString binario2);
     };
 
 }

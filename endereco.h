@@ -13,7 +13,6 @@ namespace dnn {
         QChar classe;
         QList<int> octetos;
         bool ehCIDR(QString &mascara)const;
-        bool ehBin()const;
         bool validaEndereco(QString &endereco, QList<int> &listaOctetos);
         void validaMascara(QString &mascara);
         void validaClasse();
@@ -21,7 +20,9 @@ namespace dnn {
     public:
         Endereco(QString &endereco, QString &mascara);
         QString getEndereco() const;
+        QString getEnderecoBin(QList<int> &listaOctetos) const;
         QString getMascara() const{return mascara;}
+        QString getMascaraBin()const;
         QChar getClasse() const{return classe;}
     };
 
