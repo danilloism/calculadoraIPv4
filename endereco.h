@@ -36,6 +36,8 @@ namespace dnn {
         Endereco getSubRedeUltimoHost()const;
         Endereco getSubRedeBroadcast()const;
         int getQuantidadeHosts()const;
+        QList<Endereco> getSubredes()const{return subRedes;}
+        QList<Endereco> getHosts()const{return hosts;}
 
     };
 
