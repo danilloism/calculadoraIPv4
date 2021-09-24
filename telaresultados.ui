@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>telaResultados</class>
  <widget class="QDialog" name="telaResultados">
@@ -5,13 +6,164 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>1303</width>
+    <height>788</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>30</y>
+     <width>1281</width>
+     <height>751</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="tabInformacoes">
+    <attribute name="title">
+     <string>Informações</string>
+    </attribute>
+    <widget class="QTextEdit" name="textEdit">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>1261</width>
+       <height>701</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tabDecimal">
+    <attribute name="title">
+     <string>Decimal</string>
+    </attribute>
+    <widget class="QTableWidget" name="tableWidgetListagemDecimal">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>1271</width>
+       <height>721</height>
+      </rect>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <attribute name="horizontalHeaderCascadingSectionResizes">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderMinimumSectionSize">
+      <number>22</number>
+     </attribute>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>253</number>
+     </attribute>
+     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+      <bool>true</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Sub-rede</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Broadcast</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Primeiro Host</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Último Host</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Quantidade de Hosts</string>
+      </property>
+     </column>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tabBinario">
+    <attribute name="title">
+     <string>Binário</string>
+    </attribute>
+    <widget class="QTableWidget" name="tableWidgetListagemBinaria">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>1271</width>
+       <height>721</height>
+      </rect>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <attribute name="horizontalHeaderCascadingSectionResizes">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderMinimumSectionSize">
+      <number>22</number>
+     </attribute>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>253</number>
+     </attribute>
+     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+      <bool>true</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Sub-rede</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Broadcast</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Primeiro Host</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Último Host</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Quantidade de Hosts</string>
+      </property>
+     </column>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>1180</x>
+     <y>10</y>
+     <width>111</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Voltar</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

@@ -3,23 +3,28 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
+    , telaListagem(nullptr)
     , ui(new Ui::MainWindow)
+    , ip(nullptr)
 {
     ui->setupUi(this);
     this->setFixedSize(this->width(), this->height());
     ui->lineEditMascara->setEnabled(false);
-    //QList<int> teste;
-    //for(int i=0;i<3;i++) teste.append(i);
-    //int i = 0;
-    //i = pow(2,7) + pow(2,6);
-    //ui->lineEditEndereco->setText(QString::number(i));
 }
 
 MainWindow::~MainWindow()
 {
+    if(telaListagem) delete telaListagem;
+    if(ip) delete ip;
     delete ui;
 }
 
+void MainWindow::limparTela() const{
+    ui->radioButtonCIDR_Sim->isChecked() ? ui->lineEditMascara->setEnabled(false), ui->lineEditCIDR->setEnabled(true) : ui->lineEditMascara->setEnabled(true), ui->lineEditCIDR->setEnabled(false);
+    ui->lineEditEndereco->setText("");
+    ui->lineEditCIDR->setText("");
+    ui->lineEditMascara->setText("");
+}
 
 void MainWindow::on_radioButtonCIDR_Sim_clicked()
 {
@@ -37,8 +42,15 @@ void MainWindow::on_radioButtonCIDR_Nao_clicked()
 
 void MainWindow::on_pushButtonCalcular_clicked()
 {
-    telaResultados telaResultados;
-    telaResultados.setModal(true);
-    telaResultados.exec();
+    try {
+        ip = new dnn::Endereco(ui->lineEditEndereco->text(), ui->radioButtonCIDR_Sim->isChecked() ? ui->lineEditCIDR->text() : ui->lineEditMascara->text());
+        telaListagem = new telaResultados(ip, this);
+        telaListagem->setModal(true);
+        telaListagem->show();
+        this->limparTela();
+    }  catch (QString &erro) {
+        QMessageBox::information(this,"ERRO DO SISTEMA", erro);
+    }
+
 }
 
