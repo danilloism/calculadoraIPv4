@@ -258,41 +258,48 @@ namespace dnn {
         if(this->getClasse() == "A"){
             mask = "255.";
 
-            QString bin = Utilitarios::toBinary(octetosEndereco.at(1));
-            QString mascaraBin = getMascaraBin();
-            int quantidadeUmsNaMascara = 0, octetoDecimal = 0;
-            while(bin.size()<8) bin.insert(0,"0");
-            for(int i=8; mascaraBin.at(i).digitValue() == 1; i++) quantidadeUmsNaMascara += 1;
-            for(int i=8; i<32;i+=8) mask += QString::number(stoi(mascaraBin.mid(i,8).toStdString(),nullptr,2)) + ".";
-            //for(int i=7;quantidadeUmsNaMascara!=0;i--, quantidadeUmsNaMascara--) octetoDecimal += pow(2,i);
-
-            mask.append(QString::number(octetoDecimal));
-            mask.append(".0.0");
+            int maskPos = 8;
+            int qntdDe1 = 32 - mascara.toInt();
+            QString octetos = "";
+            for(int i = maskPos; qntdDe1 >0; i++, qntdDe1--) octetos.append("1");
+            while(octetos.size() < 24) octetos.append("0");
+            for(int i = 0; i < 24; i+=8) mask += QString::number(stoi(octetos.mid(i,8).toStdString(),nullptr,2)) + ".";
+            mask.chop(1);
         } else if(this->getClasse() == "B"){
+
             mask = "255.255.";
+            QString octetos = "";
 
-            QString mascaraBin = getMascaraBin();
-            for(int i=16; i<32;i+=8) mask += QString::number(stoi(mascaraBin.mid(i,8).toStdString(),nullptr,2)) + ".";
+            if(mascara>16){
+                int maskPos = 16;
+                int qntdDe1 = mascara.toInt()-16;
+                for(int i = maskPos; qntdDe1 >0; i++, qntdDe1--) octetos.append("1");
+                while(octetos.size() < 16) octetos.append("0");
+                for(int i = 0; i < 16; i+=8) mask += QString::number(stoi(octetos.mid(i,8).toStdString(),nullptr,2)) + ".";
+                mask.chop(1);
+            }else{
+                mask += "0.0";
+            }
 
-            QString bin = Utilitarios::toBinary(octetosEndereco.at(2));
-            int quantidadeUmsNaMascara = 0, octetoDecimal = 0;
-            while(bin.size()<8) bin.insert(0,"0");
-            for(int i=0; bin.at(i).digitValue() == 1; i++) quantidadeUmsNaMascara += 1;
-            for(int i=7;quantidadeUmsNaMascara!=0;i--, quantidadeUmsNaMascara--) octetoDecimal += pow(2,i);
-
-            mask.append(QString::number(octetoDecimal));
-            mask.append(".0");
         } else if(this->getClasse() == "C"){
             mask = "255.255.255.";
 
-            int maskPos = 24;
-            int qntdDe1 = 32 - mascara.toInt() - 1;
+            /*int maskPos = 24;
+            int qntdDe1 = 32 - mascara.toInt();*/
             QString octeto = "";
-            for(int i = maskPos; qntdDe1 >=0; i++, qntdDe1--) octeto.append("1");
+            /*for(int i = maskPos; qntdDe1 > 0; i++, qntdDe1--) octeto.append("1");
             while(octeto.size() < 8) octeto.append("0");
-            mask += QString::number(stoi(octeto.toStdString(),nullptr,2));
+            mask += QString::number(stoi(octeto.toStdString(),nullptr,2));*/
 
-
+            if(mascara>24){
+                int maskPos = 24;
+                int qntdDe1 = mascara.toInt()-24;
+                for(int i = maskPos; qntdDe1 >0; i++, qntdDe1--) octeto.append("1");
+                while(octeto.size() < 8) octeto.append("0");
+                mask += QString::number(stoi(octeto.toStdString(),nullptr,2));
+            }else{
+                mask += "0";
+            }
             //for(int i=0; i<32;i+=8) m + ".";
 
             //QString bin = Utilitarios::toBinary(octetosEndereco.at(3));
