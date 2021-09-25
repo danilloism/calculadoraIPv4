@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     if(telaListagem) delete telaListagem;
-    if(ip) delete ip;
     delete ui;
 }
 
@@ -47,7 +46,6 @@ void MainWindow::on_pushButtonCalcular_clicked()
         telaListagem = new telaResultados(ip, this);
         telaListagem->setModal(true);
         telaListagem->show();
-        this->limparTela();
     }  catch (QString &erro) {
         QMessageBox::information(this,"ERRO DO SISTEMA", erro);
     }

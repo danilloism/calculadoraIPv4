@@ -11,7 +11,10 @@ namespace dnn {
         static QString toBinary(int inteiro);
         static QString binAND(QString binario1, QString binario2);
         static QString binOR(QString binario1, QString binario2);
-        static QString binOneComplement(QString binario);
+        static QString bin1Complement(QString binario);
+        static QString bin2Complement(QString binario);
+        static QString binSum(QString binario1, QString binario2);
+        static QString binSubtraction(QString minuendo, QString subtraendo);
     };
 
 }

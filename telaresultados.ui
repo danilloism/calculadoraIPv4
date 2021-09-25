@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1303</width>
-    <height>788</height>
+    <width>1385</width>
+    <height>555</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +18,8 @@
     <rect>
      <x>10</x>
      <y>30</y>
-     <width>1281</width>
-     <height>751</height>
+     <width>1371</width>
+     <height>521</height>
     </rect>
    </property>
    <property name="currentIndex">
@@ -29,15 +29,65 @@
     <attribute name="title">
      <string>Informações</string>
     </attribute>
-    <widget class="QTextEdit" name="textEdit">
+    <widget class="QTableWidget" name="tableWidgetInformacoes">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>1261</width>
-       <height>701</height>
+       <x>0</x>
+       <y>0</y>
+       <width>1371</width>
+       <height>491</height>
       </rect>
      </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="columnCount">
+      <number>3</number>
+     </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>200</number>
+     </attribute>
+     <row>
+      <property name="text">
+       <string>Endereço:</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Máscara:</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Sub-Rede:</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Broadcast:</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Primeiro Host:</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Último Host:</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Quant. Hosts:</string>
+      </property>
+     </row>
+     <column/>
+     <column/>
+     <column/>
     </widget>
    </widget>
    <widget class="QWidget" name="tabDecimal">
@@ -49,8 +99,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>1271</width>
-       <height>721</height>
+       <width>1371</width>
+       <height>491</height>
       </rect>
      </property>
      <property name="editTriggers">
@@ -63,7 +113,7 @@
       <number>22</number>
      </attribute>
      <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>253</number>
+      <number>150</number>
      </attribute>
      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
       <bool>true</bool>
@@ -104,8 +154,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>1271</width>
-       <height>721</height>
+       <width>1371</width>
+       <height>491</height>
       </rect>
      </property>
      <property name="editTriggers">
@@ -118,7 +168,7 @@
       <number>22</number>
      </attribute>
      <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>253</number>
+      <number>270</number>
      </attribute>
      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
       <bool>true</bool>
@@ -154,7 +204,7 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>1180</x>
+     <x>1270</x>
      <y>10</y>
      <width>111</width>
      <height>41</height>

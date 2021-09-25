@@ -13,7 +13,7 @@ class telaResultados : public QDialog
     Q_OBJECT
 
 public:
-    explicit telaResultados(const dnn::Endereco* endereco, QWidget *parent = nullptr);
+    explicit telaResultados(dnn::Endereco *endereco, QWidget *parent = nullptr);
     ~telaResultados();
 
 private slots:
