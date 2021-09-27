@@ -12,7 +12,7 @@ namespace dnn {
         QString mascara;
         QChar classe;
         QList<int> octetosEndereco;
-        QList<Endereco> subRedes;
+        QList<Endereco*> subRedes;
         int qtdSubRedes;
         int qtdHosts;
         Endereco* primeiroHost;
@@ -27,7 +27,9 @@ namespace dnn {
         void setSubRedeUltimoHost();
         void setSubRedeBroadcast();
         void setQtdeHosts();
-
+        void setqtdeSubRedes();
+        void setSubRede(Endereco *subRede){subRedes.push_back(subRede);}
+        void percorrerSubredes(int tamMaskSubRede, QStringList &subRedesBin, QString &bin);
 
     public:
         Endereco(QString endereco, QString mascara);
@@ -42,13 +44,13 @@ namespace dnn {
         Endereco* getSubRedeUltimoHost();
         Endereco* getSubRedeBroadcast();
         int getQuantidadeHosts()const{return qtdHosts;}
-        QList<Endereco> getSubredes()const{return subRedes;}
-        void setSubRede(Endereco subRede){subRedes.push_back(subRede);}
+        QList<Endereco*>* getSubredes()const;
         QString maskConvertCIDRToDottedDecimal() const;
         QString maskConvertDottedDecimalToCIDR() const;
         bool ehCIDR(QString mascara)const;
-        void setqtdeSubRedes();
         int getQtdeSubRedes(){return qtdSubRedes;}
+        void preencherSubRedes(int n);
+
 
     };
 

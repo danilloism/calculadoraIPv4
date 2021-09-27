@@ -1,6 +1,6 @@
 #ifndef TELARESULTADOS_H
 #define TELARESULTADOS_H
-
+#include <QMainWindow>
 #include <QDialog>
 #include <endereco.h>
 
@@ -13,7 +13,7 @@ class telaResultados : public QDialog
     Q_OBJECT
 
 public:
-    explicit telaResultados(dnn::Endereco *endereco, QWidget *parent = nullptr);
+    explicit telaResultados(dnn::Endereco *endereco, int qtdSubRedes, QWidget *parent = nullptr);
     ~telaResultados();
 
 private slots:
@@ -22,6 +22,8 @@ private slots:
 private:
     Ui::telaResultados *ui;
     dnn::Endereco* dados;
+    int qtdeSubRedes;
+    void listarResultado()const;
 
 /*public slots:
     void getData(QStringList data);*/

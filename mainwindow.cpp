@@ -5,7 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , telaListagem(nullptr)
     , ui(new Ui::MainWindow)
-    , ip(nullptr)
+    , ip(0)
 {
     ui->setupUi(this);
     this->setFixedSize(this->width(), this->height());
@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    if(telaListagem) delete telaListagem;
+    delete ip;
     delete ui;
 }
 
@@ -42,10 +42,15 @@ void MainWindow::on_radioButtonCIDR_Nao_clicked()
 void MainWindow::on_pushButtonCalcular_clicked()
 {
     try {
+        delete ip;
         ip = new dnn::Endereco(ui->lineEditEndereco->text(), ui->radioButtonCIDR_Sim->isChecked() ? ui->lineEditCIDR->text() : ui->lineEditMascara->text());
-        telaListagem = new telaResultados(ip, this);
+        if(ui->spinBoxNumSubRedes->value() > ip->getQtdeSubRedes()) throw QString("Quantidade de sub-redes fornecida ultrapassa quantidade de sub-redes da rede! Valor máx de sub-redes: "+QString::number(ip->getQtdeSubRedes()));
+        telaListagem = new telaResultados(ip, ui->spinBoxNumSubRedes->value());
         telaListagem->setModal(true);
+        telaListagem->setAttribute (Qt::WA_DeleteOnClose);
         telaListagem->show();
+
+
     }  catch (QString &erro) {
         QMessageBox::information(this,"ERRO DO SISTEMA", erro);
     }

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Calculadora IPV4 - Resultado</string>
   </property>
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
@@ -52,6 +52,11 @@
      </attribute>
      <row>
       <property name="text">
+       <string>Classe:</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
        <string>Endereço:</string>
       </property>
      </row>
@@ -67,22 +72,22 @@
      </row>
      <row>
       <property name="text">
-       <string>Broadcast:</string>
+       <string>Broadcast da sub-rede:</string>
       </property>
      </row>
      <row>
       <property name="text">
-       <string>Primeiro Host:</string>
+       <string>Primeiro host da sub-rede:</string>
       </property>
      </row>
      <row>
       <property name="text">
-       <string>Último Host:</string>
+       <string>Último host da sub-rede:</string>
       </property>
      </row>
      <row>
       <property name="text">
-       <string>Quant. Hosts:</string>
+       <string>Quant. hosts para cada sub-rede:</string>
       </property>
      </row>
      <column/>

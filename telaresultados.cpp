@@ -1,20 +1,20 @@
 #include "telaresultados.h"
 #include "ui_telaresultados.h"
 
-telaResultados::telaResultados(dnn::Endereco* endereco, QWidget *parent) :
+telaResultados::telaResultados(dnn::Endereco* endereco, int qtdSubRedes, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::telaResultados),
-    dados(nullptr)
+    dados(0),
+    qtdeSubRedes(qtdSubRedes)
 {
     ui->setupUi(this);
 
-    //ui->tableWidgetListagemBinaria->setColumnWidth()
-
+    //Preenchendo informações sobre ip informado;
     dados = endereco;
     dnn::Endereco* subRedeAtual = dados->getSubRedeAtual();
-    dnn::Endereco* broadcast = subRedeAtual->getSubRedeBroadcast();
-    dnn::Endereco* primeiroH = subRedeAtual->getSubRedePrimeiroHost();
-    dnn::Endereco* ultimoH = subRedeAtual->getSubRedeUltimoHost();
+    dnn::Endereco* broadcast = dados->getSubRedeBroadcast();
+    dnn::Endereco* primeiroH = dados->getSubRedePrimeiroHost();
+    dnn::Endereco* ultimoH = dados->getSubRedeUltimoHost();
     QTableWidgetItem *enderecoInformado = new QTableWidgetItem("Decimal: "+dados->getEndereco());
     QTableWidgetItem *enderecoInformadoBin = new QTableWidgetItem("Binário: "+dados->getEnderecoBin());
     QTableWidgetItem *mascaraEnderecoInformadoCIDR = dados->ehCIDR(dados->getMascara()) ? new QTableWidgetItem("CIDR: "+dados->getMascara()) : new QTableWidgetItem("CIDR: "+dados->maskConvertDottedDecimalToCIDR());
@@ -29,28 +29,30 @@ telaResultados::telaResultados(dnn::Endereco* endereco, QWidget *parent) :
     QTableWidgetItem *ultimoHost = new QTableWidgetItem("Decimal: "+ultimoH->getEndereco());
     QTableWidgetItem *ultimoHostBin = new QTableWidgetItem("Binário: "+ultimoH->getEnderecoBin());
     QTableWidgetItem *qntdHosts = new QTableWidgetItem(QString::number(dados->getQuantidadeHosts()));
+    QTableWidgetItem *classe = new QTableWidgetItem(dados->getClasse());
 
     ui->tableWidgetInformacoes->setColumnWidth(1,350);
 
-    ui->tableWidgetInformacoes->setItem(0,0,enderecoInformado);
-    ui->tableWidgetInformacoes->setItem(0,1,enderecoInformadoBin);
-    ui->tableWidgetInformacoes->setItem(1,0,mascaraEnderecoInformado);
-    ui->tableWidgetInformacoes->setItem(1,1,mascaraEnderecoInformadoBin);
-    ui->tableWidgetInformacoes->setItem(1,2,mascaraEnderecoInformadoCIDR);
-    ui->tableWidgetInformacoes->setItem(2,0,subRedeEnderecoInformado);
-    ui->tableWidgetInformacoes->setItem(2,1,subRedeEnderecoInformadoBin);
-    ui->tableWidgetInformacoes->setItem(3,0,broadcastSubRedeEnderecoInformado);
-    ui->tableWidgetInformacoes->setItem(3,1,broadcastSubRedeEnderecoInformadoBin);
-    ui->tableWidgetInformacoes->setItem(4,0,primeiroHost);
-    ui->tableWidgetInformacoes->setItem(4,1,primeiroHostBin);
-    ui->tableWidgetInformacoes->setItem(5,0,ultimoHost);
-    ui->tableWidgetInformacoes->setItem(5,1,ultimoHostBin);
-    ui->tableWidgetInformacoes->setItem(6,0,qntdHosts);
+    ui->tableWidgetInformacoes->setItem(0,0,classe);
+    ui->tableWidgetInformacoes->setItem(1,0,enderecoInformado);
+    ui->tableWidgetInformacoes->setItem(1,1,enderecoInformadoBin);
+    ui->tableWidgetInformacoes->setItem(2,0,mascaraEnderecoInformado);
+    ui->tableWidgetInformacoes->setItem(2,1,mascaraEnderecoInformadoBin);
+    ui->tableWidgetInformacoes->setItem(2,2,mascaraEnderecoInformadoCIDR);
+    ui->tableWidgetInformacoes->setItem(3,0,subRedeEnderecoInformado);
+    ui->tableWidgetInformacoes->setItem(3,1,subRedeEnderecoInformadoBin);
+    ui->tableWidgetInformacoes->setItem(4,0,broadcastSubRedeEnderecoInformado);
+    ui->tableWidgetInformacoes->setItem(4,1,broadcastSubRedeEnderecoInformadoBin);
+    ui->tableWidgetInformacoes->setItem(5,0,primeiroHost);
+    ui->tableWidgetInformacoes->setItem(5,1,primeiroHostBin);
+    ui->tableWidgetInformacoes->setItem(6,0,ultimoHost);
+    ui->tableWidgetInformacoes->setItem(6,1,ultimoHostBin);
+    ui->tableWidgetInformacoes->setItem(7,0,qntdHosts);
 
 
 
 
-
+    listarResultado();
     //ui->tableWidgetInformacoes->insertRow()
 
 
@@ -58,7 +60,6 @@ telaResultados::telaResultados(dnn::Endereco* endereco, QWidget *parent) :
 
 telaResultados::~telaResultados()
 {
-    if(dados) delete dados;
     delete ui;
 }
 
@@ -67,10 +68,35 @@ void telaResultados::on_pushButton_clicked()
     this->close();
 }
 
-/*void telaResultados::getData(QStringList data)
+void telaResultados::listarResultado() const
 {
-    dataFromMainWindow.append(data.at(0));
-    dataFromMainWindow.append(data.at(0));
-    dataFromMainWindow.append(data.at(0));
-}*/
+    dados->preencherSubRedes(qtdeSubRedes);
 
+    QList<dnn::Endereco*> *lista = dados->getSubredes();
+    QList<dnn::Endereco*>::iterator iterLista;
+
+    for(iterLista = lista->begin(); iterLista != lista->end(); iterLista++){
+        dnn::Endereco *objeto = *iterLista;
+
+        QString subRede = objeto->getEndereco();
+        QString broadcast = objeto->getSubRedeBroadcast()->getEndereco();
+        QString primeiroHost = objeto->getSubRedePrimeiroHost()->getEndereco();
+        QString ultimoHost = objeto->getSubRedeUltimoHost()->getEndereco();
+        QString quantidadeHosts = QString::number(objeto->getQuantidadeHosts());
+
+        QTableWidgetItem *item1 = new QTableWidgetItem(subRede);
+        QTableWidgetItem *item2 = new QTableWidgetItem(broadcast);
+        QTableWidgetItem *item3 = new QTableWidgetItem(primeiroHost);
+        QTableWidgetItem *item4 = new QTableWidgetItem(ultimoHost);
+        QTableWidgetItem *item5 = new QTableWidgetItem(quantidadeHosts);
+
+        int linha = ui->tableWidgetListagemDecimal->rowCount();
+        ui->tableWidgetListagemDecimal->insertRow(linha);
+        ui->tableWidgetListagemDecimal->setItem(linha, 0, item1);
+        ui->tableWidgetListagemDecimal->setItem(linha, 1, item2);
+        ui->tableWidgetListagemDecimal->setItem(linha, 2, item3);
+        ui->tableWidgetListagemDecimal->setItem(linha, 3, item4);
+        ui->tableWidgetListagemDecimal->setItem(linha, 4, item5);
+
+    }
+}
