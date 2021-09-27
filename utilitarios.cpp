@@ -56,23 +56,6 @@ namespace dnn {
         return bin;
     }
 
-    QStringList Utilitarios::binCombinations(int n)
-    {
-        QString bin("");
-        QStringList combinacoes;
-        if(n < 1){
-            combinacoes.push_back(bin);
-            return combinacoes;
-        }else{
-            bin[n-1] = '0';
-            binCombinations(n-1);
-            combinacoes.push_back(bin);
-            bin[n-1] = '1';
-            binCombinations(n-1);
-            bin = "0";
-        }
-    }
-
     QString Utilitarios::bin1Complement(QString binario)
     {
         QString resultado("");

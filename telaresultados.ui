@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1385</width>
-    <height>555</height>
+    <width>1106</width>
+    <height>545</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>30</y>
-     <width>1371</width>
+     <x>0</x>
+     <y>20</y>
+     <width>1101</width>
      <height>521</height>
     </rect>
    </property>
@@ -34,7 +34,7 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>1371</width>
+       <width>1091</width>
        <height>491</height>
       </rect>
      </property>
@@ -90,6 +90,11 @@
        <string>Quant. hosts para cada sub-rede:</string>
       </property>
      </row>
+     <row>
+      <property name="text">
+       <string>Quant. sub-redes da rede:</string>
+      </property>
+     </row>
      <column/>
      <column/>
      <column/>
@@ -104,7 +109,7 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>1371</width>
+       <width>1091</width>
        <height>491</height>
       </rect>
      </property>
@@ -159,7 +164,7 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>1371</width>
+       <width>1091</width>
        <height>491</height>
       </rect>
      </property>
@@ -198,21 +203,16 @@
        <string>Último Host</string>
       </property>
      </column>
-     <column>
-      <property name="text">
-       <string>Quantidade de Hosts</string>
-      </property>
-     </column>
     </widget>
    </widget>
   </widget>
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>1270</x>
+     <x>990</x>
      <y>10</y>
      <width>111</width>
-     <height>41</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">

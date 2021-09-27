@@ -5,7 +5,8 @@ telaResultados::telaResultados(dnn::Endereco* endereco, int qtdSubRedes, QWidget
     QDialog(parent),
     ui(new Ui::telaResultados),
     dados(0),
-    qtdeSubRedes(qtdSubRedes)
+    qtdeSubRedes(qtdSubRedes),
+    lista(0)
 {
     ui->setupUi(this);
 
@@ -50,12 +51,23 @@ telaResultados::telaResultados(dnn::Endereco* endereco, int qtdSubRedes, QWidget
     ui->tableWidgetInformacoes->setItem(7,0,qntdHosts);
 
 
+    if(!dados->possuiSubRedes()){
+        QMessageBox::information(this,"Atenção!", "Endereço informado não possui sub-redes! Apenas hosts.");
+        ui->tabDecimal->setEnabled(false);
+        ui->tabBinario->setEnabled(false);
+        ui->tableWidgetInformacoes->verticalHeaderItem(3)->setText("Rede:");
+        ui->tableWidgetInformacoes->verticalHeaderItem(4)->setText("Broadcast:");
+        ui->tableWidgetInformacoes->verticalHeaderItem(5)->setText("Primeiro host:");
+        ui->tableWidgetInformacoes->verticalHeaderItem(6)->setText("Último host:");
+        ui->tableWidgetInformacoes->verticalHeaderItem(7)->setText("Quant. hosts na rede:");
 
-
-    listarResultado();
-    //ui->tableWidgetInformacoes->insertRow()
-
-
+    }else{
+        QTableWidgetItem *quantidadeSubRedes = new QTableWidgetItem(QString::number(dados->getQtdeSubRedes()));
+        ui->tableWidgetInformacoes->setItem(8,0,quantidadeSubRedes);
+        dados->preencherSubRedes(qtdeSubRedes);
+        lista = dados->getSubredes();
+        listarResultado();
+    }
 }
 
 telaResultados::~telaResultados()
@@ -70,9 +82,7 @@ void telaResultados::on_pushButton_clicked()
 
 void telaResultados::listarResultado() const
 {
-    dados->preencherSubRedes(qtdeSubRedes);
 
-    QList<dnn::Endereco*> *lista = dados->getSubredes();
     QList<dnn::Endereco*>::iterator iterLista;
 
     for(iterLista = lista->begin(); iterLista != lista->end(); iterLista++){
@@ -97,6 +107,24 @@ void telaResultados::listarResultado() const
         ui->tableWidgetListagemDecimal->setItem(linha, 2, item3);
         ui->tableWidgetListagemDecimal->setItem(linha, 3, item4);
         ui->tableWidgetListagemDecimal->setItem(linha, 4, item5);
+
+        QString subRedeBin = objeto->getEnderecoBin();
+        QString broadcastBin = objeto->getSubRedeBroadcast()->getEnderecoBin();
+        QString primeiroHostBin = objeto->getSubRedePrimeiroHost()->getEnderecoBin();
+        QString ultimoHostBin = objeto->getSubRedeUltimoHost()->getEnderecoBin();
+
+        QTableWidgetItem *item1Decimal = new QTableWidgetItem(subRedeBin);
+        QTableWidgetItem *item2Decimal = new QTableWidgetItem(broadcastBin);
+        QTableWidgetItem *item3Decimal = new QTableWidgetItem(primeiroHostBin);
+        QTableWidgetItem *item4Decimal = new QTableWidgetItem(ultimoHostBin);
+
+        int linhaBin = ui->tableWidgetListagemBinaria->rowCount();
+        ui->tableWidgetListagemBinaria->insertRow(linhaBin);
+        ui->tableWidgetListagemBinaria->setItem(linhaBin, 0, item1Decimal);
+        ui->tableWidgetListagemBinaria->setItem(linhaBin, 1, item2Decimal);
+        ui->tableWidgetListagemBinaria->setItem(linhaBin, 2, item3Decimal);
+        ui->tableWidgetListagemBinaria->setItem(linhaBin, 3, item4Decimal);
+
 
     }
 }

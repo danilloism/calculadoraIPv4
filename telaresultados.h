@@ -1,8 +1,8 @@
 #ifndef TELARESULTADOS_H
 #define TELARESULTADOS_H
-#include <QMainWindow>
 #include <QDialog>
 #include <endereco.h>
+#include <QMessageBox>
 
 namespace Ui {
 class telaResultados;
@@ -24,6 +24,7 @@ private:
     dnn::Endereco* dados;
     int qtdeSubRedes;
     void listarResultado()const;
+    QList<dnn::Endereco*> *lista;
 
 /*public slots:
     void getData(QStringList data);*/

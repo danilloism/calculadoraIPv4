@@ -29,7 +29,7 @@ namespace dnn {
         void setQtdeHosts();
         void setqtdeSubRedes();
         void setSubRede(Endereco *subRede){subRedes.push_back(subRede);}
-        void percorrerSubredes(int tamMaskSubRede, QStringList &subRedesBin, QString &bin);
+
 
     public:
         Endereco(QString endereco, QString mascara);
@@ -50,6 +50,7 @@ namespace dnn {
         bool ehCIDR(QString mascara)const;
         int getQtdeSubRedes(){return qtdSubRedes;}
         void preencherSubRedes(int n);
+        bool possuiSubRedes()const{return (qtdSubRedes == 1) ? false : true;}
 
 
     };

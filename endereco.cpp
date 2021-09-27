@@ -12,9 +12,9 @@ namespace dnn {
             subRedeBroadcast(0)
         {
             try {
-                if(!this->validaEndereco(endereco, octetosEndereco)) throw QString("Erro construtor");
-                this->validaMascara(mascara);
+                if(!this->validaEndereco(endereco, octetosEndereco)) throw QString("Erro ao validar endereço! Endereço deve estar no formato <0.0.0.0>, não pode haver haver zeros não significativos e cada número deve ser menor que 255!");
                 this->validaClasse();
+                this->validaMascara(mascara);
                 this->setQtdeHosts();
                 this->setqtdeSubRedes();
                 classe == 'D' || classe == 'E' ? throw QString("Endereços de classe D e E não são válidos para essas operações.") : 0;
@@ -35,7 +35,7 @@ namespace dnn {
 
     QString Endereco::getEndereco() const
     {
-        if(octetosEndereco.isEmpty()) return "Endereço não validado.";
+        if(octetosEndereco.isEmpty()) throw QString("Endereço não validado.");
 
         QString endereco;
         for(int i=0; i<4; i++){
@@ -48,14 +48,8 @@ namespace dnn {
 
     QString Endereco::getEnderecoBin() const
     {
-        if(octetosEndereco.isEmpty()) return "Endereço não validado.";
+        if(octetosEndereco.isEmpty()) throw QString("Endereço não validado.");
         QString bin = "";
-
-        /*for(int i=0; i<4; i++){
-            if(octetosEndereco.at(i) == 0) bin.append("00000000");
-            else bin.append(Utilitarios::toBinary(octetosEndereco.at(i)));
-
-        }*/
 
         for(int i=0; i<4; i++){
             int octetAtI = octetosEndereco.at(i);
@@ -72,22 +66,25 @@ namespace dnn {
         QString mask;
         QList<int> octetos;
 
-        if(ehCIDR(this->mascara)) {
-            mask = maskConvertCIDRToDottedDecimal();
-        }else{
-            mask = mascara;
-        }
+        try {
+            if(ehCIDR(this->mascara)) {
+                mask = maskConvertCIDRToDottedDecimal();
+            }else{
+                mask = mascara;
+            }
 
-        if(!validaEndereco(mask, octetos)) throw QString("erro getMaskBin");
+            if(!validaEndereco(mask, octetos)) throw QString("erro getMaskBin");
 
-        for(int i=0; i<4; i++){
-            int octetAtI = octetos.at(i);
-            QString octetBin = Utilitarios::toBinary(octetAtI);
-            while(octetAtI != 0 && octetBin.size() < 8) octetBin.prepend("0");
-            octetAtI == 0 ? bin.append("00000000") : bin.append(octetBin);
-        }
+            for(int i=0; i<4; i++){
+                int octetAtI = octetos.at(i);
+                QString octetBin = Utilitarios::toBinary(octetAtI);
+                while(octetAtI != 0 && octetBin.size() < 8) octetBin.prepend("0");
+                octetAtI == 0 ? bin.append("00000000") : bin.append(octetBin);
+            }
 
-        return bin;
+            return bin;
+        }  catch (QString &erro) {throw erro;}
+
     }
 
     Endereco *Endereco::getSubRedeAtual()
@@ -137,7 +134,7 @@ namespace dnn {
             subRedeBroadcast = new Endereco(enderecoSubRede,getMascara());
         }  catch (QString &erro) {
             throw erro;
-        }
+        }  catch(std::bad_alloc){throw QString("Erro! Memória não alocada.");}
     }
 
     void Endereco::setQtdeHosts()
@@ -171,16 +168,26 @@ namespace dnn {
     {
         try {
             QString hostBin = getEnderecoBin();
-            hostBin = hostBin.replace(31,1,"1");
             QString enderecoHost = "";
+            if(!possuiSubRedes()){
+                if(getClasse()=="A") hostBin.replace(8,24,"000000000000000000000001");
+                else if(getClasse()=="B") hostBin.replace(16,16,"0000000000000001");
+                else if(getClasse()=="C") hostBin.replace(24,8,"00000001");
+
+            }else{
+                hostBin = hostBin.replace(31,1,"1");
+            }
             for(int i=0; i<32;i+=8){
                 enderecoHost += QString::number(stoi(hostBin.mid(i,8).toStdString(),nullptr,2)) + ".";
             }
             enderecoHost.chop(1);
             primeiroHost = new Endereco(enderecoHost,mascara);
+
+
+
         }  catch (QString &erro) {
             throw erro;
-        }
+        }  catch(std::bad_alloc){throw QString("Erro! Memória não alocada.");}
     }
 
     void Endereco::setSubRedeUltimoHost()
@@ -198,7 +205,7 @@ namespace dnn {
             ultimoHost = new Endereco(enderecoHost,mascara);
         }  catch (QString &erro) {
             throw erro;
-        }
+        } catch(std::bad_alloc){throw QString("Erro! Memória não alocada.");}
     }
 
     bool Endereco::ehCIDR(QString mascara)const
@@ -219,28 +226,17 @@ namespace dnn {
 
 
         if(this->getClasse() == "A"){
-            if(mascara.toInt()>8){
+            if(mask.toInt()>8){
                 int maskPos = 8;
-                int qntdDe1 = mascara.toInt() - 8;
-                subRedeBin.replace(maskPos,32-maskPos-qntdDe1,"");
-                while(subRedeBin.size()<32) subRedeBin.append("0");
+                int qntdDe1 = mask.toInt() - 8;
+                subRedeBin.replace(maskPos,32-maskPos,"");
 
+                int potencia = pow(2,qntdDe1);
+                int intervalo = 0;
 
-
-                for(int i=0;i<n;i++){
-                    QString B("");
-                    int temp = i;
-                    for(int j=0; j<qntdDe1; j++){
-                        if(temp%2 == 1){
-                            B = "1"+B;
-                        }else{
-                            B = "0"+B;
-                            temp = temp/2;
-                        }
-                    }
-                    subRedeBin.replace(8,qntdDe1,B);
-                    for(int i=0; i<32;i+=8) endereco += QString::number(stoi(subRedeBin.mid(i,8).toStdString(),nullptr,2)) + ".";
-                    endereco.chop(1);
+                for(int i = 0; i<n; i++, intervalo+=potencia){
+                    endereco += QString::number(stoi(subRedeBin.mid(0,8).toStdString(),nullptr,2)) + ".";
+                    endereco += QString::number(intervalo);
                     Endereco *objeto = new Endereco(endereco,mascara);
                     setSubRede(objeto);
                     endereco = "";
@@ -249,28 +245,17 @@ namespace dnn {
 
         } else if(this->getClasse() == "B"){
 
-            if(mascara.toInt()>16){
+            if(mask.toInt()>16){
                 int maskPos = 16;
-                int qntdDe1 = mascara.toInt() - 16;
-                subRedeBin.replace(maskPos,32-maskPos-qntdDe1,"");
-                while(subRedeBin.size()<32) subRedeBin.append("0");
+                int qntdDe1 = mask.toInt() - 16;
+                subRedeBin.replace(maskPos,32-maskPos,"");
 
+                int potencia = pow(2,qntdDe1);
+                int intervalo = 0;
 
-
-                for(int i=0;i<n;i++){
-                    QString B("");
-                    int temp = i;
-                    for(int j=0; j<qntdDe1; j++){
-                        if(temp%2 == 1){
-                            B = "1"+B;
-                        }else{
-                            B = "0"+B;
-                            temp = temp/2;
-                        }
-                    }
-                    subRedeBin.replace(16,qntdDe1,B);
-                    for(int i=0; i<32;i+=8) endereco += QString::number(stoi(subRedeBin.mid(i,8).toStdString(),nullptr,2)) + ".";
-                    endereco.chop(1);
+                for(int i = 0; i<n; i++, intervalo+=potencia){
+                    for(int j=0; j<16;j+=8) endereco += QString::number(stoi(subRedeBin.mid(j,8).toStdString(),nullptr,2)) + ".";
+                    endereco += QString::number(intervalo);
                     Endereco *objeto = new Endereco(endereco,mascara);
                     setSubRede(objeto);
                     endereco = "";
@@ -281,23 +266,7 @@ namespace dnn {
             if(mask.toInt()>24){
                 int maskPos = 24;
                 int qntdDe1 = mask.toInt() - 24;
-                subRedeBin.replace(maskPos,32-maskPos);
-                //while(subRedeBin.size()<32) subRedeBin.append("0");
-                //int teste = qtdSubRedes;
-                //int octeto = 0;
-                //QString binOcteto("");
-
-                //for(int i = 0;i<qntdDe1;i++){
-                //    subRedeBin.append("1");
-                //    while(subRedeBin.size()<32) subRedeBin.append("0");
-                //    for(int i=0; i<32;i+=8) endereco += QString::number(stoi(subRedeBin.mid(i,8).toStdString(),nullptr,2)) + ".";
-                //    endereco.chop(1);
-                //    Endereco *objeto = new Endereco(endereco,mascara);
-                //    setSubRede(objeto);
-                //    endereco = "";
-                //    //binOcteto = Utilitarios::toBinary(octeto);
-                //    //while(subRedeBin.size()<32) subRedeBin.append("0");
-                //}
+                subRedeBin.replace(maskPos,32-maskPos,"");
 
                 int potencia = pow(2,qntdDe1);
                 int intervalo = 0;
@@ -309,27 +278,6 @@ namespace dnn {
                     setSubRede(objeto);
                     endereco = "";
                 }
-                //QString bin("");
-                //percorrerSubredes(qntdDe1,teste, bin);
-
-                /*for(int i=0;i<n;i++){
-                    QString B("");
-                    int temp = i;
-                    for(int j=0; j<qntdDe1-n; j++){
-                        if(temp%2 == 1){
-                            B = "1"+B;
-                        }else{
-                            B = "0"+B;
-                            temp = temp/2;
-                        }
-                    }
-                    subRedeBin.replace(24,qntdDe1-n,B);
-                    for(int i=0; i<32;i+=8) endereco += QString::number(stoi(subRedeBin.mid(i,8).toStdString(),nullptr,2)) + ".";
-                    endereco.chop(1);
-                    Endereco *objeto = new Endereco(endereco,mascara);
-                    setSubRede(objeto);
-                    endereco = "";
-                }*/
             }
 
         }
@@ -338,60 +286,49 @@ namespace dnn {
 
     void Endereco::setqtdeSubRedes()
     {
-        QString maskCIDR = "";
-        if(!ehCIDR(mascara)) maskCIDR = maskConvertDottedDecimalToCIDR();
-        else maskCIDR = mascara;
+        try {
+            QString maskCIDR = "";
+            if(!ehCIDR(mascara)) maskCIDR = maskConvertDottedDecimalToCIDR();
+            else maskCIDR = mascara;
 
-        int limite = 0;
+            int limite = 0;
 
-        if(this->getClasse() == "A"){
-            if(maskCIDR.toInt()>8){
-                int maskPos = 8;
-                int qntdDe1 = maskCIDR.toInt() - 8;
+            if(this->getClasse() == "A"){
+                if(maskCIDR.toInt()>8){
+                    int maskPos = 8;
+                    int qntdDe1 = maskCIDR.toInt() - 8;
 
-                for(int i = maskPos; qntdDe1 >0; i++, qntdDe1--) limite++;
-            }else{
-                qtdSubRedes = 1;
+                    for(int i = maskPos; qntdDe1 >0; i++, qntdDe1--) limite++;
+                }else{
+                    qtdSubRedes = 1;
+                }
+            } else if(this->getClasse() == "B"){
+
+                if(maskCIDR.toInt()>16){
+                    int maskPos = 16;
+                    int qntdDe1 = maskCIDR.toInt()-16;
+                    for(int i = maskPos; qntdDe1 >0; i++, qntdDe1--) limite++;
+                }else{
+                    qtdSubRedes = 1;
+                }
+
+            } else if(this->getClasse() == "C"){
+
+                if(maskCIDR.toInt()>24){
+                    int maskPos = 24;
+                    int qntdDe1 = maskCIDR.toInt()-24;
+                    for(int i = maskPos; qntdDe1 >0; i++, qntdDe1--) limite++;
+                }else{
+                    qtdSubRedes = 1;
+                }
+
+            } else{
+                throw QString("Classe do endereço inválida.");
             }
-        } else if(this->getClasse() == "B"){
 
-            if(maskCIDR.toInt()>16){
-                int maskPos = 16;
-                int qntdDe1 = maskCIDR.toInt()-16;
-                for(int i = maskPos; qntdDe1 >0; i++, qntdDe1--) limite++;
-            }else{
-                qtdSubRedes = 1;
-            }
-
-        } else if(this->getClasse() == "C"){
-
-            if(maskCIDR.toInt()>24){
-                int maskPos = 24;
-                int qntdDe1 = maskCIDR.toInt()-24;
-                for(int i = maskPos; qntdDe1 >0; i++, qntdDe1--) limite++;
-            }else{
-                qtdSubRedes = 1;
-            }
-
-        } else{
-            throw "Classe do endereço não esta validada.";
-        }
-
-        qtdSubRedes = pow(2,limite);
-
-    }
-
-    void Endereco::percorrerSubredes(int tamMaskSubRede, QStringList &subRedesBin, QString &bin)
-    {
-        int n = tamMaskSubRede;
-        if(tamMaskSubRede < 1){
-            subRedesBin.push_back(bin);
-        }else{
-            bin[n-1] = '0';
-            percorrerSubredes(n-1, subRedesBin, bin);
-            subRedesBin.push_back(bin);
-            bin[n-1] = '1';
-            percorrerSubredes(n-1, subRedesBin, bin);
+            qtdSubRedes = pow(2,limite);
+        }  catch (QString &erro) {
+            throw erro;
         }
 
     }
@@ -419,13 +356,19 @@ namespace dnn {
     {
 
         QList<int> lista;
-        if(ehCIDR(mascara)){
+        if(ehCIDR(mascara) && getClasse() == "A" && mascara.toInt()>=8 && mascara.toInt()<=30){
             this->mascara = mascara;
-        } else if(validaEndereco(mascara, lista)){
-            if(lista.at(3) > 252) throw QString("erro valida mascara");
+        } else if(ehCIDR(mascara) && getClasse() == "B" && mascara.toInt()>=16 && mascara.toInt()<=30){
             this->mascara = mascara;
-        } else {
-            throw QString("erro else");
+        }else if(ehCIDR(mascara) && getClasse() == "C" && mascara.toInt()>=24 && mascara.toInt()<=30){
+            this->mascara = mascara;
+        }else if(validaEndereco(mascara, lista)){
+            if(getClasse() == "A" && (lista.at(0) != 255 || lista.at(3)>252)) throw QString("Máscara inválida");
+            else if(getClasse() == "B" && (lista.at(0) != 255 || lista.at(1) !=255 || lista.at(3)>252)) throw QString("Máscara inválida");
+            else if(getClasse() == "C" && (lista.at(0) != 255 || lista.at(1) !=255 || lista.at(2) !=255 || lista.at(3)>252)) throw QString("Máscara inválida");
+            this->mascara = mascara;
+        }else {
+            throw QString("Mascára Inválida. Para CIDR, os valores devem ser: (>=8 & <=30) para endereços classe A. (>=16 & <=30) para endereços classe B. (>=24 & <=30) para endereços classe C.");
         }
 
 
@@ -443,7 +386,7 @@ namespace dnn {
 
     QString Endereco::maskConvertCIDRToDottedDecimal()const
     {
-        if(!ehCIDR(this->mascara)) throw QString("erro mask convert to decimal");
+        if(!ehCIDR(this->mascara)) throw QString("Máscara não é CIDR.");
 
         QString mask;
         if(this->getClasse() == "A"){
@@ -494,7 +437,7 @@ namespace dnn {
             }
 
         } else{
-            return "Classe do endereço não esta validada.";
+            throw QString("Classe do endereço não esta validada.");
         }
 
         return mask;
@@ -502,32 +445,8 @@ namespace dnn {
 
     QString Endereco::maskConvertDottedDecimalToCIDR()const
     {
-        if(ehCIDR(this->mascara)) throw QString("erro mask convert do cidr");
-
-        int mask = getMascaraBin().count("1");
-        /*if(this->getClasse() == "A"){
-            mask = getMascaraBin().count("1");
-            QString maskBin = getMascaraBin();
-            QString bin = Utilitarios::toBinary(octetosEndereco.at(1));
-            while(bin.size()<8) bin.insert(0,"0");
-            for(int i=0; bin.at(i).digitValue() == 1; i++) mask += 1;
-        } else if(this->getClasse() == 'B'){
-            mask = 16;
-
-            QString bin = Utilitarios::toBinary(octetosEndereco.at(2));
-            while(bin.size()<8) bin.insert(0,"0");
-            for(int i=0; bin.at(i).digitValue() == 1; i++) mask += 1;
-        } else if(this->getClasse() == 'C'){
-            mask = 24;
-
-            QString bin = Utilitarios::toBinary(octetosEndereco.at(3));
-            while(bin.size()<8) bin.insert(0,"0");
-            for(int i=0; bin.at(i).digitValue() == 1; i++) mask += 1;
-        } else{
-            throw QString("erro mask convert");
-        }*/
-
-        return QString::number(mask);
+        if(ehCIDR(this->mascara)) throw QString("Máscara já é CIDR.");
+        return QString::number(getMascaraBin().count("1"));
     }
 
 }

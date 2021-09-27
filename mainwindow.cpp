@@ -43,8 +43,9 @@ void MainWindow::on_pushButtonCalcular_clicked()
 {
     try {
         delete ip;
-        ip = new dnn::Endereco(ui->lineEditEndereco->text(), ui->radioButtonCIDR_Sim->isChecked() ? ui->lineEditCIDR->text() : ui->lineEditMascara->text());
-        if(ui->spinBoxNumSubRedes->value() > ip->getQtdeSubRedes()) throw QString("Quantidade de sub-redes fornecida ultrapassa quantidade de sub-redes da rede! Valor máx de sub-redes: "+QString::number(ip->getQtdeSubRedes()));
+        ip = new dnn::Endereco(ui->lineEditEndereco->text(), ui->radioButtonCIDR_Sim->isChecked() ? ui->spinBoxCIDR->text() : ui->lineEditMascara->text());
+
+        if(ui->spinBoxNumSubRedes->value() > ip->getQtdeSubRedes() && ui->spinBoxNumSubRedes->value() > 1) throw QString("Quantidade de sub-redes fornecida ultrapassa quantidade de sub-redes da rede! Valor máx de sub-redes: "+QString::number(ip->getQtdeSubRedes()));
         telaListagem = new telaResultados(ip, ui->spinBoxNumSubRedes->value());
         telaListagem->setModal(true);
         telaListagem->setAttribute (Qt::WA_DeleteOnClose);

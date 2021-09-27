@@ -14,7 +14,6 @@ namespace dnn {
         static QString binOR(QString binario1, QString binario2);
         static QString bin1Complement(QString binario);
         static QString bin2Complement(QString binario);
-        static QStringList binCombinations(int n);
     };
 
 }
