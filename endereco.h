@@ -3,6 +3,7 @@
 #include "QList"
 #include "utilitarios.h"
 #include "math.h"
+#include <QRegExpValidator>
 
 namespace dnn {
 

@@ -89,26 +89,46 @@ namespace dnn {
 
     Endereco *Endereco::getSubRedeAtual()
     {
-        setSubRedeAtual();
-        return subRedeAtual;
+        try {
+            setSubRedeAtual();
+            return subRedeAtual;
+        }  catch (QString &erro) {
+            throw erro;
+        }
+
     }
 
     Endereco *Endereco::getSubRedePrimeiroHost()
     {
-        setSubRedePrimeiroHost();
-        return primeiroHost;
+        try {
+            setSubRedePrimeiroHost();
+            return primeiroHost;
+        }  catch (QString &erro) {
+            throw erro;
+        }
+
     }
 
     Endereco *Endereco::getSubRedeUltimoHost()
     {
-        setSubRedeUltimoHost();
-        return ultimoHost;
+        try {
+            setSubRedeUltimoHost();
+            return ultimoHost;
+        }  catch (QString &erro) {
+            throw erro;
+        }
+
     }
 
     Endereco *Endereco::getSubRedeBroadcast()
     {
-        setSubRedeBroadcast();
-        return subRedeBroadcast;
+        try {
+            setSubRedeBroadcast();
+            return subRedeBroadcast;
+        }  catch (QString &erro) {
+            throw erro;
+        }
+
     }
 
     QList<Endereco *> *Endereco::getSubredes() const
@@ -167,16 +187,9 @@ namespace dnn {
     void Endereco::setSubRedePrimeiroHost()
     {
         try {
-            QString hostBin = getEnderecoBin();
+            QString hostBin = subRedeAtual->getEnderecoBin().replace(31,1,"1");
             QString enderecoHost = "";
-            if(!possuiSubRedes()){
-                if(getClasse()=="A") hostBin.replace(8,24,"000000000000000000000001");
-                else if(getClasse()=="B") hostBin.replace(16,16,"0000000000000001");
-                else if(getClasse()=="C") hostBin.replace(24,8,"00000001");
 
-            }else{
-                hostBin = hostBin.replace(31,1,"1");
-            }
             for(int i=0; i<32;i+=8){
                 enderecoHost += QString::number(stoi(hostBin.mid(i,8).toStdString(),nullptr,2)) + ".";
             }
@@ -210,7 +223,7 @@ namespace dnn {
 
     bool Endereco::ehCIDR(QString mascara)const
     {
-        if(mascara.size() > 0 && mascara.toInt() > 0 && mascara.toInt() < 31) return true;
+        if(mascara.size() > 0 && mascara.toInt() >= 8 && mascara.toInt() <= 30) return true;
         return false;
 
     }
@@ -252,10 +265,21 @@ namespace dnn {
 
                 int potencia = pow(2,qntdDe1);
                 int intervalo = 0;
+                int indice = 0;
 
                 for(int i = 0; i<n; i++, intervalo+=potencia){
                     for(int j=0; j<16;j+=8) endereco += QString::number(stoi(subRedeBin.mid(j,8).toStdString(),nullptr,2)) + ".";
-                    endereco += QString::number(intervalo);
+                    if(intervalo>255){
+                        intervalo = 0;
+                        indice++;
+                    }
+                    if(indice == 0){
+                        endereco += QString::number(intervalo);
+
+                        if(endereco.count(".")<3) endereco.append(".0");
+                    }else{
+                        endereco+="255."+QString::number(intervalo);
+                    }
                     Endereco *objeto = new Endereco(endereco,mascara);
                     setSubRede(objeto);
                     endereco = "";
@@ -368,7 +392,9 @@ namespace dnn {
             else if(getClasse() == "C" && (lista.at(0) != 255 || lista.at(1) !=255 || lista.at(2) !=255 || lista.at(3)>252)) throw QString("Máscara inválida");
             this->mascara = mascara;
         }else {
-            throw QString("Mascára Inválida. Para CIDR, os valores devem ser: (>=8 & <=30) para endereços classe A. (>=16 & <=30) para endereços classe B. (>=24 & <=30) para endereços classe C.");
+            throw QString("Mascára Inválida. Para CIDR, os valores devem ser: (>=8 & <=30) "
+                          "para endereços classe A. (>=16 & <=30) para endereços classe B. "
+                          "(>=24 & <=30) para endereços classe C.");
         }
 
 

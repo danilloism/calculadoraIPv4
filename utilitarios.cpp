@@ -59,7 +59,8 @@ namespace dnn {
     QString Utilitarios::bin1Complement(QString binario)
     {
         QString resultado("");
-        for(int i=0; i<binario.size(); i++) binario.at(i).digitValue() == 1 ? resultado.append(QString::number(0)) : resultado.append(QString::number(1));
+        for(int i=0; i<binario.size(); i++) binario.at(i).digitValue() == 1 ?
+                    resultado.append(QString::number(0)) : resultado.append(QString::number(1));
         return resultado;
     }
 

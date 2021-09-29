@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setFixedSize(this->width(), this->height());
     ui->lineEditMascara->setEnabled(false);
+    ui->lineEditEndereco->setValidator(new  QRegExpValidator(QRegExp("[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}")));
+    ui->lineEditMascara->setValidator(new  QRegExpValidator(QRegExp("[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}")));
 }
 
 MainWindow::~MainWindow()
@@ -19,23 +21,23 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::limparTela() const{
-    ui->radioButtonCIDR_Sim->isChecked() ? ui->lineEditMascara->setEnabled(false), ui->lineEditCIDR->setEnabled(true) : ui->lineEditMascara->setEnabled(true), ui->lineEditCIDR->setEnabled(false);
+    ui->radioButtonCIDR_Sim->isChecked() ? ui->lineEditMascara->setEnabled(false), ui->spinBoxCIDR->setEnabled(true) : ui->lineEditMascara->setEnabled(true), ui->spinBoxCIDR->setEnabled(false);
     ui->lineEditEndereco->setText("");
-    ui->lineEditCIDR->setText("");
+    ui->spinBoxCIDR->setValue(8);
     ui->lineEditMascara->setText("");
 }
 
 void MainWindow::on_radioButtonCIDR_Sim_clicked()
 {
     ui->lineEditMascara->setEnabled(false);
-    ui->lineEditCIDR->setEnabled(true);
+    ui->spinBoxCIDR->setEnabled(true);
 }
 
 
 void MainWindow::on_radioButtonCIDR_Nao_clicked()
 {
     ui->lineEditMascara->setEnabled(true);
-    ui->lineEditCIDR->setEnabled(false);
+    ui->spinBoxCIDR->setEnabled(false);
 }
 
 
@@ -45,16 +47,22 @@ void MainWindow::on_pushButtonCalcular_clicked()
         delete ip;
         ip = new dnn::Endereco(ui->lineEditEndereco->text(), ui->radioButtonCIDR_Sim->isChecked() ? ui->spinBoxCIDR->text() : ui->lineEditMascara->text());
 
-        if(ui->spinBoxNumSubRedes->value() > ip->getQtdeSubRedes() && ui->spinBoxNumSubRedes->value() > 1) throw QString("Quantidade de sub-redes fornecida ultrapassa quantidade de sub-redes da rede! Valor máx de sub-redes: "+QString::number(ip->getQtdeSubRedes()));
-        telaListagem = new telaResultados(ip, ui->spinBoxNumSubRedes->value());
+        telaListagem = new telaResultados(ip);
         telaListagem->setModal(true);
-        telaListagem->setAttribute (Qt::WA_DeleteOnClose);
+        telaListagem->setAttribute(Qt::WA_DeleteOnClose);
         telaListagem->show();
-
 
     }  catch (QString &erro) {
         QMessageBox::information(this,"ERRO DO SISTEMA", erro);
     }
 
+}
+
+
+void MainWindow::on_pushButtonLimpar_clicked()
+{
+    ui->lineEditEndereco->clear();
+    ui->lineEditMascara->clear();
+    ui->spinBoxCIDR->setValue(8);
 }
 

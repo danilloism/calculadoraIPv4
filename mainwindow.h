@@ -29,6 +29,8 @@ private slots:
 /*signals:
     void sendData(QStringList data);*/
 
+    void on_pushButtonLimpar_clicked();
+
 private:
     Ui::MainWindow *ui;
     void limparTela()const;
