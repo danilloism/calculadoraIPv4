@@ -36,7 +36,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Marco Aurélio Sirqueira de Sá || Danillo Ilggner da Silva Maciel</string>
+    <string>Danillo Ilggner da Silva Maciel</string>
    </property>
   </widget>
   <widget class="QTableWidget" name="tableWidgetInformacoes">

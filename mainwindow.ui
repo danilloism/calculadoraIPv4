@@ -59,9 +59,9 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>90</x>
       <y>290</y>
-      <width>301</width>
+      <width>151</width>
       <height>16</height>
      </rect>
     </property>
@@ -71,7 +71,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Marco Aurélio Sirqueira de Sá || Danillo Ilggner da Silva Maciel</string>
+     <string>Danillo Ilggner da Silva Maciel</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBox_3">
